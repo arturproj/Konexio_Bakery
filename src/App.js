@@ -4,6 +4,8 @@ import 'jquery';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.js';
 
+import specimen from './specimen.jpg';
+
 import Button from './Components/core/Button';
 
 import Add from './Components/Add';
@@ -18,13 +20,23 @@ class App extends React.Component {
       inputForm : '',
       inputSlider : 1,
       activeTab : 'add',
-      items : []
+
+      items : [],
+
+      source_img : specimen,
+
+      subTotalPay : 0,
+      vatPay : 0,
+      ecoTaxPay : 0,
+      TotalPay : 0,
     };
 
     this.handleClick = this.handleClick.bind(this);
     this.handleForm = this.handleForm.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleSlider = this.handleSlider.bind(this);
+    this.handleUpdate = this.handleUpdate.bind(this);
+    this.handleDelete = this.handleDelete.bind(this);
   }
 
   handleClick(this_comp) {
@@ -43,17 +55,69 @@ class App extends React.Component {
     });
   }
   handleSubmit() {
-    console.log(this.state.inputForm)
-    console.log(this.state.inputSlider)
-    const items = this.state.items;
-    items.push({product:this.state.inputForm,price:this.state.inputSlider});
+    if ( this.state.inputForm !== '' && this.state.inputForm !== ' ' ){
+      const items = this.state.items;
+      fetch(`http://konexio.codiscovery.co/bakery/api/?q=${this.state.inputForm}`)
+      .then(response => response.json())
+      .then(image => {
+          items.map((item,i)=> {
+             if( item.product === this.state.inputForm ) {
+              items.splice(i, 1)
+             }
+          });
+          items.push({ 
+            product:this.state.inputForm, 
+            price:this.state.inputSlider, 
+            qt:0, 
+            source : ( image.success === true ? image.source : this.state.source_img )
+          })
+          this.setState({
+            items,
+            inputForm : "",
+            inputSlider: 1,
+            activeTab : "list"
+          })
+        })
+    }
+  }
+  handleUpdate(val){    
+    let items = this.state.items;
+    var price = {
+      subTotalPay : 0,
+      vatPay : 0,
+      ecoTaxPay : 0,
+      TotalPay : 0,
+    };
+    items.map((item)=>{
+      if( item.product === val){       
+        item.qt += 1;
+        price.TotalPay += item.price * item.qt;
+        price.vatPay += ( price.TotalPay * 20 )/100 ;
+        price.subTotalPay += price.TotalPay;
+        price.ecoTaxPay += 0.03 * item.qt;       
+      }
+      return item;
+    })
     this.setState({
       items,
-      inputForm : "",
-      inputSlider: 1,
-      activeTab : "list"
-    });  
-    console.log(this.state.items)  
+      subTotalPay : this.state.subTotalPay + price.subTotalPay,
+      vatPay : this.state.vatPay + price.vatPay,
+      ecoTaxPay : this.state.ecoTaxPay + price.ecoTaxPay,
+      TotalPay : this.state.TotalPay + price.TotalPay + price.ecoTaxPay,
+    })
+    console.log(items)
+  }
+  handleDelete(val){    
+    let items = this.state.items;
+    items.map((item,i)=>{
+      if( item.product === val){     
+        items.splice(i, 1);  
+      }
+      return item;
+    })
+    this.setState({
+      items,
+    })
   }
 
   render() {
@@ -85,7 +149,17 @@ class App extends React.Component {
                                               onClick={() => this.handleSubmit()} 
                                           /> : null}
         {this.state.activeTab === 'list' ? <List list={this.state.items} /> : null}
-        {this.state.activeTab === 'pay' ? <Pay /> : null}
+        {this.state.activeTab === 'pay' ? <Pay 
+                                              list={this.state.items} 
+                                              onUpdate={this.handleUpdate} 
+                                              onDelete={this.handleDelete} 
+                                              priceTab={{
+                                                subTotalPay : this.state.subTotalPay,
+                                                vatPay : this.state.vatPay,
+                                                ecoTaxPay : this.state.ecoTaxPay,
+                                                TotalPay : this.state.TotalPay
+                                              }}
+                                          /> : null}
       </div>
     );
   }

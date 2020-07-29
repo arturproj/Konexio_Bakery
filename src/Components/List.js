@@ -11,7 +11,7 @@ class List extends React.Component{
               this.props.list.map((item,i) =>
                 <li key={i} className="list-group-item d-flex justify-content-between align-items-center">
                   {item.product}
-                  <span className="badge badge-primary badge-pill">{item.price}</span>
+                  <span className="badge badge-primary badge-pill">{item.price} €</span>
                 </li>
               ) : 'Not items found'
           }

@@ -8,7 +8,7 @@ class Slider extends Component{
     
     render(){
         return(
-            <RCSlider
+            <RCSlider style={{ margin: "0 10px" }}
                 max={this.props.max} 
                 min={this.props.min} 
                 onChange={this.props.onChange} 

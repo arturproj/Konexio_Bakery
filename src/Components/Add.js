@@ -13,11 +13,11 @@ const Add = ({ name='Demo', onClick, inputForm, inputSlider, slider }) => {
         <div className="input-group my-3">
           <input onChange={inputForm} type="text" className="form-control" />
           <div className="input-group-append">
-            <Button onClick={onClick} name={name} stylesheetClass={["btn-primary"]} />
+            <Button onClick={onClick} name={name} stylesheetClass={["btn-primary"]} stylesheetElement={{width: "auto"}} />
           </div>   
         </div>
         <p className="d-flex justify-content-between mb-3">
-            <span>€</span> <span>{slider}</span>
+            <span className="ml-1">€</span> <span className="mr-1">{slider}</span>
           </p>
           <Slider
               min={1} 
