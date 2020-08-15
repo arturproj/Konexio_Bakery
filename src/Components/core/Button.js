@@ -10,7 +10,7 @@ const Button = ({ name='Demo', onClick, stylesheetClass, stylesheetElement}) => 
                         className.push(this_class);
                 });
         }else{
-                console.warn("BUTTON:\nattribute 'stylesheetClass' is empty...");
+                //console.warn("BUTTON:\nattribute 'stylesheetClass' is empty...");
         }
         //
         const styleObject = {width: "33.3%"};
@@ -20,11 +20,11 @@ const Button = ({ name='Demo', onClick, stylesheetClass, stylesheetElement}) => 
                         styleObject[key] = value;
                 });
         }else{
-                console.warn("BUTTON:\nattribute 'stylesheetClass' is empty...");
+                //console.warn("BUTTON:\nattribute 'stylesheetClass' is empty...");
         }
         //
         if ( name === 'Demo'){
-                console.error("BUTTON:\nattribute 'name' is empty ...\nauto injection default 'CLICK ME' ");
+                //console.error("BUTTON:\nattribute 'name' is empty ...\nauto injection default 'CLICK ME' ");
         }
         // 
         return (

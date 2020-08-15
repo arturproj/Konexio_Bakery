@@ -24,11 +24,6 @@ class App extends React.Component {
       items : [],
 
       source_img : specimen,
-
-      subTotalPay : 0,
-      vatPay : 0,
-      ecoTaxPay : 0,
-      TotalPay : 0,
     };
 
     this.handleClick = this.handleClick.bind(this);
@@ -82,36 +77,24 @@ class App extends React.Component {
   }
   handleUpdate(val){    
     let items = this.state.items;
-    var price = {
-      subTotalPay : 0,
-      vatPay : 0,
-      ecoTaxPay : 0,
-      TotalPay : 0,
-    };
+
     items.map((item)=>{
       if( item.product === val){       
-        item.qt += 1;
-        price.TotalPay += item.price * item.qt;
-        price.vatPay += ( price.TotalPay * 20 )/100 ;
-        price.subTotalPay += price.TotalPay;
-        price.ecoTaxPay += 0.03 * item.qt;       
+        item.qt += 1; 
+        return item;
       }
       return item;
     })
+   
     this.setState({
       items,
-      subTotalPay : this.state.subTotalPay + price.subTotalPay,
-      vatPay : this.state.vatPay + price.vatPay,
-      ecoTaxPay : this.state.ecoTaxPay + price.ecoTaxPay,
-      TotalPay : this.state.TotalPay + price.TotalPay + price.ecoTaxPay,
     })
-    console.log(items)
   }
   handleDelete(val){    
     let items = this.state.items;
     items.map((item,i)=>{
-      if( item.product === val){     
-        items.splice(i, 1);  
+      if( item.product === val && item.qt > 0){     
+        item.qt--;
       }
       return item;
     })
@@ -153,12 +136,6 @@ class App extends React.Component {
                                               list={this.state.items} 
                                               onUpdate={this.handleUpdate} 
                                               onDelete={this.handleDelete} 
-                                              priceTab={{
-                                                subTotalPay : this.state.subTotalPay,
-                                                vatPay : this.state.vatPay,
-                                                ecoTaxPay : this.state.ecoTaxPay,
-                                                TotalPay : this.state.TotalPay
-                                              }}
                                           /> : null}
       </div>
     );

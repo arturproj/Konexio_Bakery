@@ -17,7 +17,7 @@ const Card = ({ item, onClick, stylesheetClass}) => {
                         className.push(this_class);
                 });
         }else{
-                console.warn("BUTTON:\nattribute 'stylesheetClass' is empty...");
+                //console.warn("Card:\nattribute 'stylesheetClass' is empty...");
         }
         return (
             <Button   
