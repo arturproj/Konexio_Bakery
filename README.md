@@ -1,3 +1,5 @@
+<img src="https://github.com/arturproj/React--Bakery/blob/master/react-bakery.gif" alt="Bakery Gif" style="max-width:100%;">
+
 # Konexio_Bakery
 Exercice - Bakery
 Introduction
